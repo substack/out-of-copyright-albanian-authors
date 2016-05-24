@@ -3,12 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "substack",
+  "license": [ "public domain", "cc0" ],
   "dependencies": {
     "concat-stream": "^1.5.1",
     "quotemeta": "0.0.0",
