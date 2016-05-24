@@ -4,6 +4,7 @@ var concat = require('concat-stream')
 var qm = require('quotemeta')
 var category = RegExp(qm('[[Kategoria:Biografi shqiptarësh]]'), 'i')
 var died = require('./died.js')
+var thisYear = new Date().getFullYear()
 
 var tr = trumpet()
 var ctitle = null
@@ -20,7 +21,7 @@ tr.selectAll('page text', function (elem) {
     .pipe(concat({ encoding: 'string' }, function (body) {
       if (category.test(body)) {
         var d = died(body)
-        if (d) console.log(title, d)
+        if (d && (thisYear - d) > 70) console.log(title + ',' + d)
       }
     }))
 })
