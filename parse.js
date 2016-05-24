@@ -5,25 +5,21 @@ var qm = require('quotemeta')
 var re = RegExp(qm('[[Kategoria:Biografi shqiptarësh]]'), 'i')
 
 var tr = trumpet()
-tr.selectAll('page', function (elem) {
-  var t = trumpet()
-  var pending = 2, title = null, src = null
-  t.select('title').createReadStream()
+var ctitle = null
+tr.selectAll('page title', function (elem) {
+  elem.createReadStream()
     .pipe(concat({ encoding: 'string' }, function (body) {
-      title = body
-      if (--pending === 0) done()
+      ctitle = body
     }))
-  t.select('text').createReadStream()
+})
+tr.selectAll('page text', function (elem) {
+  var title = ctitle
+  if (/^(MediaWiki|Wikipedia):/.test(title)) return
+  elem.createReadStream()
     .pipe(concat({ encoding: 'string' }, function (body) {
-      if (re.test(body)) src = body
-      if (--pending === 0) done()
+      if (re.test(body)) {
+        console.log(title)
+      }
     }))
-  elem.createReadStream().pipe(t)
-
-  function done () {
-    if (src) {
-      console.log(title)
-    }
-  }
 })
 fs.createReadStream('articles.xml').pipe(tr)
