@@ -2,7 +2,8 @@ var trumpet = require('trumpet')
 var fs = require('fs')
 var concat = require('concat-stream')
 var qm = require('quotemeta')
-var re = RegExp(qm('[[Kategoria:Biografi shqiptarësh]]'), 'i')
+var category = RegExp(qm('[[Kategoria:Biografi shqiptarësh]]'), 'i')
+var died = require('./died.js')
 
 var tr = trumpet()
 var ctitle = null
@@ -17,8 +18,9 @@ tr.selectAll('page text', function (elem) {
   if (/^(MediaWiki|Wikipedia):/.test(title)) return
   elem.createReadStream()
     .pipe(concat({ encoding: 'string' }, function (body) {
-      if (re.test(body)) {
-        console.log(title)
+      if (category.test(body)) {
+        var d = died(body)
+        if (d) console.log(title, d)
       }
     }))
 })
